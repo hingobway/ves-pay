@@ -4,6 +4,7 @@ const cors = require('cors');
 const crypto = require('crypto');
 
 const Err = require('./err');
+const harvest = require('./harvest');
 
 const { Invoice } = require('./models');
 
@@ -37,7 +38,12 @@ r.use(bp.urlencoded({ extended: true }));
 
 /* \/ unauthenticated requests \/ */
 
-// here
+r.get('/harvest/fromurl', async (req, res) => {
+  if (!(req.query && req.query.url)) return res.err(400, 'MISSING_URL');
+  const number = await harvest(req.query.url);
+  if (!number) return res.err(400, 'UNABLE_TO_CRAWL_URL');
+  res.json({ number });
+});
 
 /* /\ unauthenticated requests /\ */
 r.use(auth);
@@ -61,6 +67,20 @@ r.patch('/invoice/:number', async (req, res) => {
   invoice.url = url;
   const out = await invoice.save();
   res.json({ invoice: (({ number, url }) => ({ number, url }))(out) });
+});
+
+r.post('/new/fromurl', async (req, res) => {
+  if (!(req.body && req.body.url)) return res.err(400, 'MISSING_URL');
+
+  const { url } = req.body;
+  if (await Invoice.findOne({ url })) return res.err(409, 'ALREADY_EXISTS');
+
+  const number = await harvest(url);
+  if (!number) return res.err(400, 'UNABLE_TO_CRAWL_URL');
+
+  const invoice = await Invoice({ number, url }).save();
+
+  res.json({ invoice: (({ number, url }) => ({ number, url }))(invoice) });
 });
 
 r.post('/new', async (req, res) => {
