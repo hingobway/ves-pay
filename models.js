@@ -5,5 +5,6 @@ exports.Invoice = db.model(
   db.Schema({
     number: String,
     url: String,
+    paid: { type: Boolean, default: false },
   })
 );
