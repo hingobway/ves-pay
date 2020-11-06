@@ -6,10 +6,13 @@ import Dialog from './components/Dialog';
 
 import check from './svg/check.svg';
 
-const dialogs = {
-  invoice: { title: 'When you pay...', button: `Let’s go` },
+const dialogs = (action) => ({
+  invoice: {
+    title: `Pay with ${action[0].toUpperCase() + action.slice(1)}`,
+    button: `Let’s go`,
+  },
   zelle: { title: 'Pay with Zelle', button: 'OK' },
-};
+});
 
 export default class Home extends Component {
   state = {
@@ -38,10 +41,7 @@ export default class Home extends Component {
         break;
       case 'venmo':
         this.setState({
-          modal: {
-            dialog: 'invoice',
-            link: '/qr?' + this.props.project.number,
-          },
+          modal: { dialog: 'invoice', link: action },
         });
         break;
       case 'zelle':
@@ -85,7 +85,7 @@ export default class Home extends Component {
           <Dialog
             modal={{
               ...this.state.modal,
-              ...dialogs[this.state.modal.dialog],
+              ...dialogs(this.state.modal.link)[this.state.modal.dialog],
             }}
             number={this.props.project.number}
             onHide={this.handleHide}
@@ -117,6 +117,8 @@ export default class Home extends Component {
         `}</style>
       </div>
     ) : (
+      // IF PAID = TRUE
+
       <div className="content">
         <header>
           <Logo number={this.props.project.number} />
@@ -151,6 +153,15 @@ export default class Home extends Component {
             justify-content: center;
             align-items: center;
           }
+          @media (max-height: 799.999px) {
+            main {
+              position: initial;
+              width: auto;
+              height: auto;
+              margin-top: 50px;
+            }
+          }
+
           @media (min-width: 768px) {
             .cont {
               transform: scale(1.15);

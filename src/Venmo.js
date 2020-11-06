@@ -10,6 +10,13 @@ const link = 'https://venmo.com/code?user_id=2862168697470976596';
 const isMobile = detectMobile(false).isAny();
 
 export default class Venmo extends Component {
+  constructor(props) {
+    super(props);
+
+    if (props.project && props.project.paid)
+      window.location.href = '/' + props.project.number;
+  }
+
   canvas = React.createRef();
 
   componentDidMount() {
@@ -73,14 +80,16 @@ export default class Venmo extends Component {
             width: 100%;
             text-align: center;
 
+            background: var(--lt-gray);
             font: normal normal normal 20px/15px var(--font);
             color: var(--accent-dark);
 
-            background: var(--lt-gray);
             padding: 12px;
             padding-top: 17px;
             padding-bottom: 17px;
             margin: 0;
+            margin-bottom: -1px;
+
             border-top-left-radius: 12px;
             border-top-right-radius: 12px;
           }

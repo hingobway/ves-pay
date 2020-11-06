@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 import Invoice from './dialogs/Invoice';
 import Zelle from './dialogs/Zelle';
 
-const links = {
+const links = (number) => ({
   paypal: 'https://paypal.me/vesmichael',
-};
+  venmo: '/qr?' + number,
+});
 
 export default class Dialog extends Component {
   state = {
@@ -35,13 +36,7 @@ export default class Dialog extends Component {
           <hr />
           <div className="text">{this.state.modal}</div>
           {this.props.modal.link ? (
-            <a
-              href={
-                links[this.props.modal.link]
-                  ? links[this.props.modal.link]
-                  : this.props.modal.link
-              }
-            >
+            <a href={links(this.props.number)[this.props.modal.link]}>
               <div className="button">
                 <div className="text">{this.props.modal.button}</div>
               </div>
