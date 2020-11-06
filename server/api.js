@@ -67,7 +67,7 @@ r.delete('/invoice/:number', async (req, res) => {
   res.json({ deleted: true });
 });
 
-r.patch('/invoice/:number', async (req, res) => {
+r.patch('/invoice/:number/url', async (req, res) => {
   if (!(req.body && req.body.url)) return res.err(400, 'MISSING_URL');
   const { url } = req.body;
 
@@ -79,19 +79,14 @@ r.patch('/invoice/:number', async (req, res) => {
   res.json({ invoice: prep(out) });
 });
 
-r.patch('/paid/:number', async (req, res) => {
+r.patch('/invoice/:number/paid', async (req, res) => {
   const invoice = await Invoice.findOne({ number: req.params.number });
   if (!invoice) return res.err(404, 'INVOICE_NOT_FOUND');
 
-  invoice.paid = true;
-  const out = await invoice.save();
-  res.json({ invoice: prep(out) });
-});
-r.patch('/unpaid/:number', async (req, res) => {
-  const invoice = await Invoice.findOne({ number: req.params.number });
-  if (!invoice) return res.err(404, 'INVOICE_NOT_FOUND');
+  if (!(req.body && typeof req.body.paid === 'boolean'))
+    return res.err(400, 'INVALID_VALUE');
 
-  invoice.paid = false;
+  invoice.paid = req.body.paid;
   const out = await invoice.save();
   res.json({ invoice: prep(out) });
 });
