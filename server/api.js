@@ -25,6 +25,9 @@ function auth(req, res, next) {
   next();
 }
 
+// PREPARE INVOICE
+const prep = ({ number, url, paid }) => ({ number, url, paid });
+
 // API ROUTER
 const r = new express.Router();
 
@@ -43,6 +46,13 @@ r.get('/harvest/fromurl', async (req, res) => {
   const number = await harvest(req.query.url);
   if (!number) return res.err(400, 'UNABLE_TO_CRAWL_URL');
   res.json({ number });
+});
+
+r.get('/invoice/:number', async (req, res) => {
+  const invoice = await Invoice.findOne({ number: req.params.number });
+  if (!invoice) return res.err(404, 'INVOICE_NOT_FOUND');
+
+  res.json({ invoice: prep(invoice) });
 });
 
 /* /\ unauthenticated requests /\ */
@@ -66,7 +76,7 @@ r.patch('/invoice/:number', async (req, res) => {
 
   invoice.url = url;
   const out = await invoice.save();
-  res.json({ invoice: (({ number, url }) => ({ number, url }))(out) });
+  res.json({ invoice: prep(out) });
 });
 
 r.post('/new/fromurl', async (req, res) => {
@@ -80,7 +90,7 @@ r.post('/new/fromurl', async (req, res) => {
 
   const invoice = await Invoice({ number, url }).save();
 
-  res.json({ invoice: (({ number, url }) => ({ number, url }))(invoice) });
+  res.json({ invoice: prep(invoice) });
 });
 
 r.post('/new', async (req, res) => {
@@ -91,7 +101,7 @@ r.post('/new', async (req, res) => {
   if (await Invoice.findOne({ number })) return res.err(409, 'ALREADY_EXISTS');
   const invoice = await Invoice({ number, url }).save();
 
-  res.json({ invoice: (({ number, url }) => ({ number, url }))(invoice) });
+  res.json({ invoice: prep(invoice) });
 });
 
 module.exports = r;

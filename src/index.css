@@ -1,0 +1,36 @@
+:root {
+  /* Colors: */
+  --black: #212529;
+  --gray: #6c757d;
+  --lt-gray: #ececec;
+  --white: #ffffff;
+  --accent-bright: #f4623a;
+  --accent-dark: #343a40;
+
+  /* Font/text values */
+  --font: 'Merriweather Sans', sans-serif;
+  --f-size: 21px;
+  --f-xspace: 0.21px;
+  --f-yspace: 27px;
+}
+
+.ghost {
+  /* color: */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  background: var(--accent-bright);
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
