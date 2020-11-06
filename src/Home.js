@@ -8,7 +8,9 @@ import check from './svg/check.svg';
 
 const dialogs = (action) => ({
   invoice: {
-    title: `Pay with ${action[0].toUpperCase() + action.slice(1)}`,
+    title: `Pay with ${
+      action ? action[0].toUpperCase() + action.slice(1) : ''
+    }`,
     button: `Let’s go`,
   },
   zelle: { title: 'Pay with Zelle', button: 'OK' },
