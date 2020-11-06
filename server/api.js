@@ -79,6 +79,23 @@ r.patch('/invoice/:number', async (req, res) => {
   res.json({ invoice: prep(out) });
 });
 
+r.patch('/paid/:number', async (req, res) => {
+  const invoice = await Invoice.findOne({ number: req.params.number });
+  if (!invoice) return res.err(404, 'INVOICE_NOT_FOUND');
+
+  invoice.paid = true;
+  const out = await invoice.save();
+  res.json({ invoice: prep(out) });
+});
+r.patch('/unpaid/:number', async (req, res) => {
+  const invoice = await Invoice.findOne({ number: req.params.number });
+  if (!invoice) return res.err(404, 'INVOICE_NOT_FOUND');
+
+  invoice.paid = false;
+  const out = await invoice.save();
+  res.json({ invoice: prep(out) });
+});
+
 r.post('/new/fromurl', async (req, res) => {
   if (!(req.body && req.body.url)) return res.err(400, 'MISSING_URL');
 
