@@ -4,7 +4,7 @@ import buttons from './buttons';
 
 const Btn = ({ button, onClick }) => (
   <div className="button" onClick={onClick ? onClick : null}>
-    <img src={buttons[button.name]} alt={button.name} />
+    <img src={buttons[button.name]} alt={button.name} draggable="false" />
     <div className="text">{button.text ? button.text : button.name}</div>
   </div>
 );

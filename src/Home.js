@@ -125,7 +125,7 @@ export default class Home extends Component {
         <main>
           <div className="cont">
             <div className="upper">
-              <img src={check} alt="check" />
+              <img src={check} alt="check" draggable="false" />
               <div>You’re all set.</div>
             </div>
             <div className="lower">
