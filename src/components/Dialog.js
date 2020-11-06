@@ -3,8 +3,10 @@ import React, { Component } from 'react';
 import Invoice from './dialogs/Invoice';
 import Zelle from './dialogs/Zelle';
 
+import { PAYPAL } from '../paymentlinks';
+
 const links = (number) => ({
-  paypal: 'https://paypal.me/vesmichael',
+  paypal: PAYPAL,
   venmo: '/qr?' + number,
 });
 

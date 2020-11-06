@@ -5,7 +5,7 @@ import detectMobile from 'detect-mobile-browser';
 
 import Logo from './components/Logo';
 
-const link = 'https://venmo.com/code?user_id=2862168697470976596';
+import { VENMO } from './paymentlinks';
 
 const isMobile = detectMobile(false).isAny();
 
@@ -20,9 +20,9 @@ export default class Venmo extends Component {
   canvas = React.createRef();
 
   componentDidMount() {
-    if (isMobile) window.location = link;
+    if (isMobile) window.location = VENMO;
     else
-      qrcode.toCanvas(this.canvas.current, link, {
+      qrcode.toCanvas(this.canvas.current, VENMO, {
         margin: 2,
         width: 800,
         color: {
@@ -56,7 +56,7 @@ export default class Venmo extends Component {
               &lt;&nbsp; Back to payment options
             </a>
           )}
-          <a href={link}>Already on mobile?</a>
+          <a href={VENMO}>Already on mobile?</a>
         </footer>
 
         <style jsx>{`
